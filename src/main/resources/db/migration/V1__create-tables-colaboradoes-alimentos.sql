@@ -1,0 +1,12 @@
+CREATE TABLE colaboradores(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    cpf BIGINT NOT NULL UNIQUE
+);
+
+CREATE TABLE alimentos(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    id_colaborador BIGINT NOT NULL,
+    FOREIGN KEY (id_colaborador) REFERENCES colaboradores(id)
+);
