@@ -31,4 +31,10 @@ public class Colaborador {
 	
 	@OneToMany
 	private List<AlimentoDesjejum> alimentos = new ArrayList<>();
+
+	public void atualizarInformacoes(String nome, Long cpf, List<AlimentoDesjejum> alimentos) {
+		this.nome=nome;
+		this.cpf=cpf;
+		this.alimentos=alimentos;
+	}
 }

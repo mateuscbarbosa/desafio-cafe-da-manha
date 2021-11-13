@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorAtualizarFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDto;
 import br.com.unidac.desafiocafedamanhaapi.modelo.Colaborador;
@@ -34,5 +35,18 @@ public class ColaboradorService {
 		colaboradorRepository.save(colaborador);
 		
 		return modelMapper.map(colaborador, ColaboradorOutputDto.class);
+	}
+
+	@Transactional
+	public ColaboradorOutputDto atualizar(ColaboradorAtualizarFormDto colaboradorForm) {
+		Colaborador colaborador = colaboradorRepository.findById(colaboradorForm.getId()).get();
+		
+		colaborador.atualizarInformacoes(colaboradorForm.getNome(), colaboradorForm.getCpf(), colaborador.getAlimentos());
+		return modelMapper.map(colaborador, ColaboradorOutputDto.class);
+	}
+
+	@Transactional
+	public void remover(Long id) {
+		colaboradorRepository.deleteById(id);
 	}
 }
