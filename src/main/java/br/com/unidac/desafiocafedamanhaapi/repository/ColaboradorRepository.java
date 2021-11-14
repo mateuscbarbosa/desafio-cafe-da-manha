@@ -10,4 +10,6 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 
 	Optional<Colaborador> findByCpf(String cpf);
 
+	boolean existsByCpf(String cpf);
+
 }

@@ -3,6 +3,7 @@ package br.com.unidac.desafiocafedamanhaapi.controller;
 import java.net.URI;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class ColaboradorController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ColaboradorOutputDto> remover(@PathVariable @Valid Long id){
+	public ResponseEntity<ColaboradorOutputDto> remover(@PathVariable @NotNull Long id){
 		service.remover(id);
 		
 		return ResponseEntity.noContent().build();

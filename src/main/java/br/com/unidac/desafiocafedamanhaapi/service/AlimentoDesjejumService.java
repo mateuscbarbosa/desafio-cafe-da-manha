@@ -1,6 +1,5 @@
 package br.com.unidac.desafiocafedamanhaapi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumOutputDto;
+import br.com.unidac.desafiocafedamanhaapi.infra.RegrasDeNegocioException;
 import br.com.unidac.desafiocafedamanhaapi.modelo.AlimentoDesjejum;
 import br.com.unidac.desafiocafedamanhaapi.modelo.Colaborador;
 import br.com.unidac.desafiocafedamanhaapi.repository.AlimentoDesjejumRepository;
@@ -30,6 +31,7 @@ public class AlimentoDesjejumService {
 		return alimentos.map(a -> modelMapper.map(alimentos, AlimentoDesjejumOutputDto.class));
 	}
 
+	@Transactional
 	public void cadastrar(List<AlimentoDesjejumFormDto> alimentosForm,Colaborador colaborador){
 		List<AlimentoDesjejum> alimentos = alimentosForm.stream()
 															.map(a -> modelMapper.map(a, AlimentoDesjejum.class))
@@ -41,13 +43,13 @@ public class AlimentoDesjejumService {
 	}
 	
 	public boolean verificaAlimentosCadastrados(List<AlimentoDesjejum> alimentos) {
-		List<String> respostas = new ArrayList<>();
+		String resposta;
 		for (AlimentoDesjejum alimentoDesjejum : alimentos) {
 			boolean existe = alimentoRepository
 					.existePorNomeSemEspacos(alimentoDesjejum.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
 			if (existe) {
-				respostas.add("Alguém já irá trazer " + alimentoDesjejum.getNome());
-				return true;
+				resposta = "Alguém já irá trazer " + alimentoDesjejum.getNome() + ". Tente outro alimento.";
+				throw new RegrasDeNegocioException(resposta);
 			}
 		}
 
