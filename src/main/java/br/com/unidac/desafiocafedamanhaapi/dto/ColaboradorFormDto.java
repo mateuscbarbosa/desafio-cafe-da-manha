@@ -3,6 +3,7 @@ package br.com.unidac.desafiocafedamanhaapi.dto;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -16,10 +17,11 @@ public class ColaboradorFormDto {
 	@NotBlank
 	private String nome;
 	
-	@NotNull
-	@CPF
-	private Long cpf;
-	
 	@NotBlank
+	@CPF
+	@Pattern(regexp = "[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{2}")
+	private String cpf;
+	
+	@NotNull
 	private List<AlimentoDesjejumFormDto> alimentos;
 }

@@ -1,0 +1,1 @@
+ALTER TABLE colaboradores MODIFY cpf VARCHAR(11)

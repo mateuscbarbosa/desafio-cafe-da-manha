@@ -1,0 +1,1 @@
+ALTER TABLE alimentos RENAME COLUMN id_colaborador TO colaborador_id;

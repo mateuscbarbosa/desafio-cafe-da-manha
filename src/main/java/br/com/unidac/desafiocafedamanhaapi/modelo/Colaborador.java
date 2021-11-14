@@ -27,12 +27,12 @@ public class Colaborador {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	private Long cpf;
+	private String cpf;
 	
 	@OneToMany
 	private List<AlimentoDesjejum> alimentos = new ArrayList<>();
 
-	public void atualizarInformacoes(String nome, Long cpf, List<AlimentoDesjejum> alimentos) {
+	public void atualizarInformacoes(String nome, String cpf, List<AlimentoDesjejum> alimentos) {
 		this.nome=nome;
 		this.cpf=cpf;
 		this.alimentos=alimentos;
