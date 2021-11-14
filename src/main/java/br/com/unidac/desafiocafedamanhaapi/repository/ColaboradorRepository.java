@@ -8,6 +8,6 @@ import br.com.unidac.desafiocafedamanhaapi.modelo.Colaborador;
 
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 
-	Optional<Colaborador> getByCpf(String cpf);
+	Optional<Colaborador> findByCpf(String cpf);
 
 }

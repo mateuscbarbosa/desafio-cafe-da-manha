@@ -3,6 +3,7 @@ package br.com.unidac.desafiocafedamanhaapi.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class Colaborador {
 	private String nome;
 	private String cpf;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL)
 	private List<AlimentoDesjejum> alimentos = new ArrayList<>();
 
 	public void atualizarInformacoes(String nome, String cpf, List<AlimentoDesjejum> alimentos) {
@@ -37,4 +38,5 @@ public class Colaborador {
 		this.cpf=cpf;
 		this.alimentos=alimentos;
 	}
+
 }

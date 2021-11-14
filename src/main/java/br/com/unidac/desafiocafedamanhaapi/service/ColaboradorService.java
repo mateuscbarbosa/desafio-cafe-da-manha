@@ -26,12 +26,15 @@ public class ColaboradorService {
 	private ColaboradorRepository colaboradorRepository;
 	
 	@Autowired
+	private AlimentoDesjejumService alimentoService;
+	
+	@Autowired
 	private AlimentoDesjejumRepository alimentoRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
 
-	
+		
 	public Page<ColaboradorOutputDto> listar(Pageable paginacao){
 		Page<Colaborador> colaboradores = colaboradorRepository.findAll(paginacao);
 		return colaboradores.map(c -> modelMapper.map(c, ColaboradorOutputDto.class));
@@ -42,19 +45,22 @@ public class ColaboradorService {
 		Colaborador colaborador = modelMapper.map(colaboradorForm, Colaborador.class);
 		colaborador.setId(null);
 		
-		List<AlimentoDesjejum> alimentos = colaboradorForm.getAlimentos()
-														  .stream().map(a -> modelMapper
-																  			.map(a, AlimentoDesjejum.class))
-														  					.collect(Collectors.toList());
-		colaboradorRepository.save(colaborador);
+		List<AlimentoDesjejum> alimentos = colaboradorForm.getAlimentos().stream()
+				.map(a -> modelMapper.map(a, AlimentoDesjejum.class))
+				.collect(Collectors.toList());
+		//colaborador.setAlimentos(alimentos);
+		//alimentos.stream().forEach(a -> a.setColaborador(colaborador));
 		
-		if(!verificaAlimentosCadastrados(alimentos)) { // criar a classe controller e testar
-			Colaborador registrado = colaboradorRepository.getByCpf(colaborador.getCpf()).get();
-			alimentos.stream().forEach(a -> a.setColaborador(registrado));
-			alimentoRepository.saveAll(alimentos);
+		if(!verificaAlimentosCadastrados(alimentos)) {
+			colaborador.setAlimentos(alimentos);
+			alimentos.stream().forEach(a -> a.setColaborador(colaborador));
 		}
 		
-		return modelMapper.map(colaborador, ColaboradorOutputDto.class);
+		//alimentoService.cadastrar(colaboradorForm.getAlimentos(), colaborador);
+		
+		colaboradorRepository.save(colaborador);
+		
+		return modelMapper.map(colaboradorForm, ColaboradorOutputDto.class);
 	}
 
 	@Transactional
@@ -70,16 +76,17 @@ public class ColaboradorService {
 		colaboradorRepository.deleteById(id);
 	}
 	
-	private boolean verificaAlimentosCadastrados(List<AlimentoDesjejum> alimentos){
+	public boolean verificaAlimentosCadastrados(List<AlimentoDesjejum> alimentos) {
 		List<String> respostas = new ArrayList<>();
 		for (AlimentoDesjejum alimentoDesjejum : alimentos) {
-			boolean existe = alimentoRepository.existePorNomeSemEspacos(alimentoDesjejum.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
-			if(existe) {
+			boolean existe = alimentoRepository
+					.existePorNomeSemEspacos(alimentoDesjejum.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
+			if (existe) {
 				respostas.add("Alguém já irá trazer " + alimentoDesjejum.getNome());
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
