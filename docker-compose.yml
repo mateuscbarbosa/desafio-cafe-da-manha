@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  desafeio_cafe_da_manha_database:
+    image: mysql:8.0
+    restart: always
+    expose:
+      - 3306
+    env_file:
+      - desafio_cafe_da_manha_database.env
+  
+  desafeio_cafe_da_manha_app:
+    image: unidac/desafio_cafe_da_manha-api
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - desafio_cafe_da_manha_database
+    env_file:
+      - desafio_cafe_da_manha_app.env
