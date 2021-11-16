@@ -33,7 +33,7 @@ public class AlimentoDesjejumService {
 
 	public Page<AlimentoDesjejumOutputDto> listar(Pageable paginacao) {
 		Page<AlimentoDesjejum> alimentos = alimentoRepository.findAll(paginacao);
-		return alimentos.map(a -> modelMapper.map(alimentos, AlimentoDesjejumOutputDto.class));
+		return alimentos.map(a -> modelMapper.map(a, AlimentoDesjejumOutputDto.class));
 	}
 
 	@Transactional
@@ -55,7 +55,12 @@ public class AlimentoDesjejumService {
 		Colaborador colaborador = colaboradorRepository.findByCpf(alimentoFormDto.getColaboradorCpf())
 														.orElseThrow(() -> new RegrasDeNegocioException("Colaborador não encontrado!"));
 		
-		if(!alimento.verificaAlimentoPertencenteAColaborador(colaborador)) {
+		boolean existe = alimentoRepository
+				.existePorNomeSemEspacos(alimentoFormDto.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
+		if(!alimento.verificaAlimentoPertencenteAColaborador(colaborador) || existe) {
+			if(existe) {
+				throw new RegrasDeNegocioException("Alguém já irá trazer " + alimentoFormDto.getNome() + ". Tente outro alimento.");
+			}
 			lancarExceptionAlimentoDeOutroColaborador();
 		}
 		
@@ -76,13 +81,11 @@ public class AlimentoDesjejumService {
 	}
 	
 	private boolean verificaAlimentosCadastrados(List<AlimentoDesjejum> alimentos) {
-		String resposta;
 		for (AlimentoDesjejum alimentoDesjejum : alimentos) {
 			boolean existe = alimentoRepository
 					.existePorNomeSemEspacos(alimentoDesjejum.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
 			if (existe) {
-				resposta = "Alguém já irá trazer " + alimentoDesjejum.getNome() + ". Tente outro alimento.";
-				throw new RegrasDeNegocioException(resposta);
+				throw new RegrasDeNegocioException("Alguém já irá trazer " + alimentoDesjejum.getNome() + ". Tente outro alimento.");
 			}
 		}
 
