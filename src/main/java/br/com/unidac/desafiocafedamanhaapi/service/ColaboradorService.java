@@ -1,5 +1,7 @@
 package br.com.unidac.desafiocafedamanhaapi.service;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,9 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorAtualizarFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDto;
+import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDtoAtualizar;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDto;
+import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDtoDetalhado;
 import br.com.unidac.desafiocafedamanhaapi.infra.RegrasDeNegocioException;
 import br.com.unidac.desafiocafedamanhaapi.modelo.Colaborador;
 import br.com.unidac.desafiocafedamanhaapi.repository.ColaboradorRepository;
@@ -50,7 +53,7 @@ public class ColaboradorService {
 	}
 
 	@Transactional
-	public ColaboradorOutputDto atualizar(ColaboradorAtualizarFormDto colaboradorForm) {
+	public ColaboradorOutputDto atualizar(ColaboradorFormDtoAtualizar colaboradorForm) {
 		Colaborador colaborador = colaboradorRepository.findById(colaboradorForm.getId()).get();
 		
 		colaborador.atualizarInformacoes(colaboradorForm.getNome(), colaboradorForm.getCpf(), colaborador.getAlimentos());
@@ -60,6 +63,12 @@ public class ColaboradorService {
 	@Transactional
 	public void remover(Long id) {
 		colaboradorRepository.deleteById(id);
+	}
+
+	public ColaboradorOutputDtoDetalhado detalhar(Long id) {
+		Colaborador colaborador = colaboradorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+		
+		return modelMapper.map(colaborador, ColaboradorOutputDtoDetalhado.class);
 	}
 
 }

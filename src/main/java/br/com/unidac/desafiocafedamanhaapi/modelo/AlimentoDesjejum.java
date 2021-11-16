@@ -29,5 +29,13 @@ public class AlimentoDesjejum {
 	@ManyToOne
 	@JoinColumn(name = "colaborador_id")
 	private Colaborador colaborador;
+
+	public void atualizarInformacoes(String nome, Colaborador colaborador) {
+		this.nome = nome;
+		this.colaborador = colaborador;
+	}
 	
+	public boolean verificaAlimentoPertencenteAColaborador(Colaborador colaborador) {
+		return this.colaborador.equals(colaborador);
+	}
 }

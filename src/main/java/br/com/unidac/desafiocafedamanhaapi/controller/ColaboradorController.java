@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorAtualizarFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDto;
+import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDtoAtualizar;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDto;
+import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDtoDetalhado;
 import br.com.unidac.desafiocafedamanhaapi.service.ColaboradorService;
 
 @RestController
@@ -45,7 +46,7 @@ public class ColaboradorController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<ColaboradorOutputDto> atualizar(@RequestBody @Valid ColaboradorAtualizarFormDto colaboradorForm){
+	public ResponseEntity<ColaboradorOutputDto> atualizar(@RequestBody @Valid ColaboradorFormDtoAtualizar colaboradorForm){
 		ColaboradorOutputDto colaboradorOutputDto = service.atualizar(colaboradorForm);
 		
 		return ResponseEntity.ok(colaboradorOutputDto);
@@ -56,5 +57,12 @@ public class ColaboradorController {
 		service.remover(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<ColaboradorOutputDtoDetalhado> detalher(@PathVariable @NotNull Long id) {
+		ColaboradorOutputDtoDetalhado dtoDetalhado = service.detalhar(id);
+		
+		return ResponseEntity.ok(dtoDetalhado);
 	}
 }

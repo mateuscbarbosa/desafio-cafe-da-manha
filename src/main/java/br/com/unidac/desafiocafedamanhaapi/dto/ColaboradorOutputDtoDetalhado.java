@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ColaboradorAtualizarFormDto extends ColaboradorFormDto{
+public class ColaboradorOutputDtoDetalhado extends ColaboradorOutputDto{
 
-	private Long id;
+	private String cpf;
 }
