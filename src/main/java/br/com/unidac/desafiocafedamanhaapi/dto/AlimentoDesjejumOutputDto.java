@@ -7,5 +7,7 @@ import lombok.Setter;
 @Setter
 public class AlimentoDesjejumOutputDto {
 	
+	private Long id;
 	private String nome;
+
 }

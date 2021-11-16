@@ -45,7 +45,7 @@ public class ColaboradorService {
 			throw new RegrasDeNegocioException("CPF indisponível!");
 		}
 		
-		alimentoService.cadastrar(colaboradorForm.getAlimentos(), colaborador);
+		alimentoService.cadastrarAutomatico(colaboradorForm.getAlimentos(), colaborador);
 		
 		colaboradorRepository.save(colaborador);
 		

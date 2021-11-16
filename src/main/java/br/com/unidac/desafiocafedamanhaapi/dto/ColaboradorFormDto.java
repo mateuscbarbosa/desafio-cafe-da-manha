@@ -23,5 +23,5 @@ public class ColaboradorFormDto {
 	private String cpf;
 	
 	@NotNull
-	private List<AlimentoDesjejumFormDto> alimentos;
+	private List<String> alimentos;
 }

@@ -24,20 +24,25 @@ import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorFormDtoAtualizar;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.ColaboradorOutputDtoDetalhado;
 import br.com.unidac.desafiocafedamanhaapi.service.ColaboradorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/colaboradores")
+@Api(tags = "Colaboradores")
 public class ColaboradorController {
 
 	@Autowired
 	private ColaboradorService service;
 	
 	@GetMapping
+	@ApiOperation("Lista com todos os Colaboradores e o que irão trazer")
 	public Page<ColaboradorOutputDto> listar(Pageable paginacao){
 		return service.listar(paginacao);
 	}
 	
 	@PostMapping
+	@ApiOperation("Cadastro de Colaborador e o que irá trazer sendo inserido automanticamente")
 	public ResponseEntity<ColaboradorOutputDto> cadastrar(@RequestBody @Valid ColaboradorFormDto colaboradorForm, UriComponentsBuilder uriBuilder){
 		ColaboradorOutputDto colaboradorOutputDto = service.cadastrar(colaboradorForm);
 		
@@ -46,6 +51,7 @@ public class ColaboradorController {
 	}
 	
 	@PutMapping
+	@ApiOperation("Atualização dos dados do Colaborador")
 	public ResponseEntity<ColaboradorOutputDto> atualizar(@RequestBody @Valid ColaboradorFormDtoAtualizar colaboradorForm){
 		ColaboradorOutputDto colaboradorOutputDto = service.atualizar(colaboradorForm);
 		
@@ -53,6 +59,7 @@ public class ColaboradorController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@ApiOperation("Remoção do Colaborador escolhido e todos os alimentos que iria trazer")
 	public ResponseEntity<ColaboradorOutputDto> remover(@PathVariable @NotNull Long id){
 		service.remover(id);
 		
@@ -60,6 +67,7 @@ public class ColaboradorController {
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation("Detalhamento do Colaborador escolhido")
 	public ResponseEntity<ColaboradorOutputDtoDetalhado> detalher(@PathVariable @NotNull Long id) {
 		ColaboradorOutputDtoDetalhado dtoDetalhado = service.detalhar(id);
 		

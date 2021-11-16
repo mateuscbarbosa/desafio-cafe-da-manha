@@ -37,7 +37,7 @@ public class AlimentoDesjejumService {
 	}
 
 	@Transactional
-	public void cadastrar(List<AlimentoDesjejumFormDto> alimentosForm,Colaborador colaborador){
+	public void cadastrarAutomatico(List<String> alimentosForm,Colaborador colaborador){
 		List<AlimentoDesjejum> alimentos = alimentosForm.stream()
 															.map(a -> modelMapper.map(a, AlimentoDesjejum.class))
 															.collect(Collectors.toList()); 
@@ -45,6 +45,26 @@ public class AlimentoDesjejumService {
 			colaborador.setAlimentos(alimentos);
 			alimentos.stream().forEach(a -> a.setColaborador(colaborador));
 		}
+	}
+	
+	@Transactional
+	public AlimentoDesjejumOutputDto cadastrar(AlimentoDesjejumFormDto alimentoForm) {
+		boolean existe = alimentoRepository
+				.existePorNomeSemEspacos(alimentoForm.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
+		if(existe) {
+			throw new RegrasDeNegocioException("Alguém já irá trazer " + alimentoForm.getNome() + ". Tente outro alimento.");
+		}
+		
+		Colaborador colaborador = colaboradorRepository
+									.findByCpf(alimentoForm.getColaboradorCpf())
+									.orElseThrow(() -> new RegrasDeNegocioException(("Colaborador não encontrado!")));
+		AlimentoDesjejum alimento = modelMapper.map(alimentoForm, AlimentoDesjejum.class);
+		alimento.setId(null);
+		alimento.setColaborador(colaborador);
+		
+		alimentoRepository.save(alimento);
+		
+		return modelMapper.map(alimento, AlimentoDesjejumOutputDto.class);
 	}
 	
 	@Transactional
