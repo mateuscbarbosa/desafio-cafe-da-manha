@@ -1,5 +1,5 @@
 # Desafio Café da Manhã
-![Badge Back-End](http://img.shields.io/static/v1?label=BACK-END&message=EM%20COMPLETO&color=GREEN&style=for-the-badge)
+![Badge Back-End](http://img.shields.io/static/v1?label=BACK-END&message=COMPLETO&color=GREEN&style=for-the-badge)
 ![Badge Front-End](https://img.shields.io/static/v1?label=FRONT-END&message=N%C3%83O%20INICIADO&color=critical&style=for-the-badge)
 
 ## Descição do Projeto
