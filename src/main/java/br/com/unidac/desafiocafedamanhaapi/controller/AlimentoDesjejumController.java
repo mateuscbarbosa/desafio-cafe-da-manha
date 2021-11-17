@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDtoAtualizar;
+import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDtoCpf;
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumOutputDto;
 import br.com.unidac.desafiocafedamanhaapi.service.AlimentoDesjejumService;
 import io.swagger.annotations.Api;
@@ -44,7 +44,7 @@ public class AlimentoDesjejumController {
 	
 	@PostMapping
 	@ApiOperation("Cadastro de novos alimentos que podem ser trazidos pelos colaboradores. Não permite inserir alimentos já registrados previamente")
-	public ResponseEntity<AlimentoDesjejumOutputDto> cadastrar(@RequestBody @Valid AlimentoDesjejumFormDto alimentoForm, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<AlimentoDesjejumOutputDto> cadastrar(@RequestBody @Valid AlimentoDesjejumFormDtoCpf alimentoForm, UriComponentsBuilder uriBuilder){
 		AlimentoDesjejumOutputDto alimentoDto = service.cadastrar(alimentoForm);
 		
 		URI uri = uriBuilder.path("/alimentos/{id}").buildAndExpand(alimentoDto.getId()).toUri();

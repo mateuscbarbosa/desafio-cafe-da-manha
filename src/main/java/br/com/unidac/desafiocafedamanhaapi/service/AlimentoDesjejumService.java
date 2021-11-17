@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDto;
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDtoAtualizar;
+import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumFormDtoCpf;
 import br.com.unidac.desafiocafedamanhaapi.dto.AlimentoDesjejumOutputDto;
 import br.com.unidac.desafiocafedamanhaapi.infra.RegrasDeNegocioException;
 import br.com.unidac.desafiocafedamanhaapi.modelo.AlimentoDesjejum;
@@ -37,7 +38,7 @@ public class AlimentoDesjejumService {
 	}
 
 	@Transactional
-	public void cadastrarAutomatico(List<String> alimentosForm,Colaborador colaborador){
+	public void cadastrarAutomatico(List<AlimentoDesjejumFormDto> alimentosForm,Colaborador colaborador){
 		List<AlimentoDesjejum> alimentos = alimentosForm.stream()
 															.map(a -> modelMapper.map(a, AlimentoDesjejum.class))
 															.collect(Collectors.toList()); 
@@ -48,7 +49,7 @@ public class AlimentoDesjejumService {
 	}
 	
 	@Transactional
-	public AlimentoDesjejumOutputDto cadastrar(AlimentoDesjejumFormDto alimentoForm) {
+	public AlimentoDesjejumOutputDto cadastrar(AlimentoDesjejumFormDtoCpf alimentoForm) {
 		boolean existe = alimentoRepository
 				.existePorNomeSemEspacos(alimentoForm.getNome().toLowerCase().trim().replaceAll("\\s+", ""));
 		if(existe) {
@@ -72,7 +73,7 @@ public class AlimentoDesjejumService {
 		AlimentoDesjejum alimento = alimentoRepository.
 										findById(alimentoFormDto.getId())
 										.orElseThrow(() -> new RegrasDeNegocioException("Alimento não encontrado!"));
-		Colaborador colaborador = colaboradorRepository.findByCpf(alimentoFormDto.getColaboradorCpf())
+		Colaborador colaborador = colaboradorRepository.encontrePorAlimentoId(alimentoFormDto.getId())
 														.orElseThrow(() -> new RegrasDeNegocioException("Colaborador não encontrado!"));
 		
 		boolean existe = alimentoRepository

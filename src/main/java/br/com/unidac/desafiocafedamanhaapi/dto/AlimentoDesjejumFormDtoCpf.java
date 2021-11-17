@@ -1,27 +1,22 @@
 package br.com.unidac.desafiocafedamanhaapi.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class ColaboradorFormDto {
-	
-	@NotBlank
-	private String nome;
-	
+@Setter
+public class AlimentoDesjejumFormDtoCpf extends AlimentoDesjejumFormDto{
+		
 	@NotBlank
 	@CPF
 	@Pattern(regexp = "[0-9]{11}")
-	private String cpf;
-	
-	@NotNull
-	private List<AlimentoDesjejumFormDto> alimentos;
+	@JsonAlias(value = "cpf")
+	private String colaboradorCpf;
 }
